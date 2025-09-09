@@ -5,11 +5,11 @@ import { useQuery, gql } from "@apollo/client";
 import { motion } from "framer-motion";
 import { differenceInMinutes, parseISO, setHours, setMinutes } from "date-fns";
 import { CircleUserRound, Clock3, ThumbsDown, ThumbsUp, Search } from "lucide-react";
-import { KPIStatCard } from "../components/KPIStatCard";
-import { EmployeesDonut } from "../components/EmployeesDonut";
-import { LeaveRequestTable } from "../components/LeaveRequestTable";
-import { Toast } from "../components/Toast";
-import { EarlyRisersCard, LateArrivalsCard, MissingPunchCard } from "../components/Card";
+import { KPIStatCard } from "./components/KPIStatCard";
+import { EmployeesDonut } from "./components/EmployeesDonut";
+import { LeaveRequestTable } from "./components/LeaveRequestTable";
+import { Toast } from "./components/Toast";
+import { EarlyRisersCard, LateArrivalsCard, MissingPunchCard } from "./components/Card";
 
 // ================== GraphQL Queries ==================
 const GET_EMPLOYEES = gql`

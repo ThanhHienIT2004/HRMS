@@ -24,7 +24,7 @@ export const TopNav = () => {
   const pathname = usePathname();
 
   const navItems = [
-    { href: "/admin-dashboard", label: "Trang chủ", icon: Home },
+    { href: "/", label: "Trang chủ", icon: Home },
     { href: "/employees", label: "Nhân sự", icon: Users },
     { href: "/timekeeping", label: "Chấm công", icon: Clock3 },
     { href: "/positions", label: "Vị trí", icon: Briefcase },
@@ -39,7 +39,7 @@ export const TopNav = () => {
             {/* Logo + Menu */}
             <div className="flex items-center gap-3">
               <Link
-                  href="/admin-dashboard"
+                  href="/"
                   className="flex items-center gap-2 text-white/90 hover:opacity-80 transition"
               >
                 <div

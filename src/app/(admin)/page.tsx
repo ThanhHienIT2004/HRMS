@@ -164,17 +164,6 @@ export default function HRMSDashboard() {
     }, [timekeepings]);
 
     // ================== Filters ==================
-    const filteredRequests = useMemo(() => {
-        const q = query.toLowerCase().trim();
-        if (!q) return requests;
-        return requests.filter(
-            (r: any) =>
-                r.name.toLowerCase().includes(q) ||
-                r.employeeId.toLowerCase().includes(q) ||
-                r.type.toLowerCase().includes(q)
-        );
-    }, [query, requests]);
-
     const filteredEarlyRisers = useMemo(() => {
         const q = query.toLowerCase().trim();
         if (!q) return earlyRisers;
@@ -218,15 +207,6 @@ export default function HRMSDashboard() {
         { men: 0, women: 0, other: 0 }
     );
 
-    // ================== Handlers ==================
-    const handleUpdate = (id: string, status: string) => {
-        setRequests((prev: any) =>
-            prev.map((r: any) => (r.id === id ? { ...r, status } : r))
-        );
-        setToast(status === "accepted" ? "Leave request accepted" : "Leave request rejected");
-        setTimeout(() => setToast(null), 2500);
-    };
-
     // ================== Render ==================
     return (
         <div className="min-h-screen bg-[#EDEEFF]">
@@ -249,7 +229,9 @@ export default function HRMSDashboard() {
                                 className="w-64 rounded-full bg-white py-2 pl-9 pr-3 text-sm shadow-sm ring-1 ring-black/5 focus:outline-none"
                             />
                         </div>
-                        <button className="rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-indigo-500">
+                        <button className="rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-indigo-500"
+                                style={{ background: "linear-gradient(to right, #B8C2FF 0%, #6183FF 100%)" }}
+                        >
                             Quản lý nhân sự
                         </button>
                     </div>

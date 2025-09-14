@@ -5,7 +5,7 @@ import NextAuth from "next-auth/next";
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 const client = new ApolloClient({
-    uri: process.env.GRAPHQL_API_URL,
+    uri: process.env.NEXT_PUBLIC_GRAPHQL_API_URL,
     cache: new InMemoryCache(),
 });
 

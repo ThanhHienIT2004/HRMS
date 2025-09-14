@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Search, Eye, Trash2, Plus, Filter, Pencil } from "lucide-react";
+import {Search, Eye, Trash2, Plus, Filter, Download, Pencil} from "lucide-react";
 import { CardContent } from "@mui/material";
 import { Card } from "@/app/(admin)/components/Card";
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import EmployeeDetailModal from "@/app/(admin)/employeeDetail/employee-detail";
 import EmployeeCreateModal from "@/app/(admin)/employees/EmployeeCreateModal";
 import EmployeeEditModal from "@/app/(admin)/employees/EmployeeEditModal";
@@ -49,6 +49,15 @@ const DELETE_EMPLOYEE = gql`
   }
 `;
 
+const EXPORT_EMPLOYEES = gql`
+  query ExportEmployeesExcel {
+    exportEmployeesExcel {
+      filename
+      base64
+    }
+  }
+`;
+
 export default function EmployeesPage() {
     const [query, setQuery] = useState("");
     const [selectedEmployee, setSelectedEmployee] = useState<any>(null);
@@ -62,8 +71,9 @@ export default function EmployeesPage() {
     });
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedToDelete, setSelectedToDelete] = useState<any>(null);
+    const [exporting, setExporting] = useState(false);
+    const [fetchExport] = useLazyQuery(EXPORT_EMPLOYEES);
 
-    // Đồng bộ trạng thái loading của query với loadingContext
     useEffect(() => {
         setLoading(loading);
     }, [loading, setLoading]);
@@ -89,6 +99,71 @@ export default function EmployeesPage() {
         }
     };
 
+    const handleExport = async () => {
+        try {
+            setExporting(true);
+            const { data, error } = await fetchExport();
+
+            if (error) {
+                console.error("GraphQL error:", error);
+                enqueueSnackbar(`Xuất Excel thất bại: ${error.message} ❌`, { variant: "error" });
+                return;
+            }
+
+            if (!data || !data.exportEmployeesExcel) {
+                console.error("No data returned from server");
+                enqueueSnackbar("Không có dữ liệu để xuất Excel ❌", { variant: "error" });
+                return;
+            }
+
+            const { filename, base64 } = data.exportEmployeesExcel;
+            console.log("Filename:", filename);
+            console.log("Base64 length:", base64?.length);
+            console.log("Base64 preview:", base64?.substring(0, 100));
+
+            if (!base64) {
+                console.error("Base64 data is missing");
+                enqueueSnackbar("Dữ liệu base64 không tồn tại ❌", { variant: "error" });
+                return;
+            }
+
+            // Kiểm tra chuỗi base64 hợp lệ
+            const isValidBase64 = /^[A-Za-z0-9+/=]+$/.test(base64);
+            if (!isValidBase64) {
+                console.error("Invalid base64 string:", base64.substring(0, 100));
+                enqueueSnackbar("Chuỗi base64 không hợp lệ ❌", { variant: "error" });
+                return;
+            }
+
+            // Giải mã base64 và tạo file
+            const byteCharacters = atob(base64);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            });
+
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = filename || "employees.xlsx";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+
+            enqueueSnackbar("Xuất Excel thành công ✅", { variant: "success" });
+        } catch (err) {
+            console.error("Export error:", err);
+            enqueueSnackbar(`Xuất Excel thất bại: ${err.message} ❌`, { variant: "error" });
+        } finally {
+            setExporting(false);
+        }
+    };
+
     if (error) return <p>Lỗi: {error.message}</p>;
 
     const employees = data?.getEmployees || [];
@@ -108,9 +183,7 @@ export default function EmployeesPage() {
                     <h1 className="text-2xl font-semibold text-gray-800">Tất cả nhân sự</h1>
                 </div>
 
-                {/* Toolbar */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
-                    {/* Search */}
                     <div className="relative w-full sm:w-72">
                         <Search className="absolute left-3 top-2.5 size-4 text-gray-400" />
                         <input
@@ -122,7 +195,6 @@ export default function EmployeesPage() {
                         />
                     </div>
 
-                    {/* Actions */}
                     <div className="flex gap-2">
                         <button
                             onClick={() => setShowCreateModal(true)}
@@ -131,8 +203,16 @@ export default function EmployeesPage() {
                         >
                             <Plus className="size-4" /> Thêm nhân sự
                         </button>
-                        <button className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 shadow ring-1 ring-gray-200 hover:bg-gray-50">
-                            <Filter className="size-4" /> Lọc
+                        {/*<button className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 shadow ring-1 ring-gray-200 hover:bg-gray-50">*/}
+                        {/*    <Filter className="size-4" /> Lọc*/}
+                        {/*</button>*/}
+                        <button
+                            onClick={handleExport}
+                            disabled={exporting}
+                            className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 shadow ring-1 ring-gray-200 hover:bg-gray-50"
+                        >
+                            <Download className="size-4" />
+                            {exporting ? "Đang xuất..." : "Xuất Excel"}
                         </button>
                     </div>
                     {showCreateModal && (
@@ -146,7 +226,6 @@ export default function EmployeesPage() {
                     )}
                 </div>
 
-                {/* Table */}
                 <Card>
                     <CardContent>
                         <div className="overflow-x-auto">
@@ -252,7 +331,6 @@ export default function EmployeesPage() {
                     />
                 )}
 
-                {/* Pagination */}
                 <div className="flex items-center justify-between mt-4 text-sm text-gray-600">
                     <div>
                         Showing {filtered.length} of {employees.length} records

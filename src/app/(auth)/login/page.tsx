@@ -7,6 +7,7 @@ import { useSnackbar } from "notistack";
 import { useLoading } from "@/app/context/loadingContext";
 import Link from "next/link";
 import { toast } from "react-toastify";
+import React from "react";
 
 const Login = () => {
     const { enqueueSnackbar } = useSnackbar();
@@ -32,12 +33,10 @@ const Login = () => {
             const session = await getSession();
             const role = session?.user?.role;
             toast.success("Đăng nhập thành công!", { toastId: "login-success" });
-            if (role === "ADMIN") {
-                window.location.href = "/admin-dashboard";
-            } else if (role === "DOCTOR") {
-                window.location.href = "/doctor-dashboard";
+            if (role === 0) {
+                window.location.href = "/";
             } else {
-                window.location.href = "/admin-dashboard";
+                window.location.href = "/employee";
             }
             setLoading(false);
         }
@@ -127,8 +126,7 @@ const Login = () => {
                             </div>
                         </div>
 
-                        {/* Quên mật khẩu */}
-                        <div className="text-right">
+                        <div className="flex flex-col gap-y-2">
                             <Link
                                 href="/forgot-password"
                                 className="text-sm text-indigo-600 hover:underline"
@@ -137,24 +135,38 @@ const Login = () => {
                             </Link>
                         </div>
 
+
+
                         {/* Nút đăng nhập */}
                         <div>
                             <button
                                 type="submit"
-                                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
+                                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-md text-white
+                                     bg-gradient-to-r from-indigo-400 to-indigo-600
+                                     hover:from-indigo-500 hover:to-indigo-700
+                                     focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2
+                                     transition-all duration-300 ease-in-out transform hover:scale-[1.02]"
                             >
                                 Đăng nhập
                             </button>
+
                         </div>
                     </form>
+                    <p className="text-center text-sm text-gray-600 mt-4">
+                        Chưa có tài khoản?{" "}
+                        <a href="/register" className="text-blue-600 hover:underline">
+                            Đăng ký
+                        </a>
+                    </p>
                 </div>
 
                 {/* Bên phải: Ảnh minh họa */}
-                <div className="hidden md:flex items-center justify-center bg-gradient-to-br from-indigo-500 to-blue-600 p-8">
+                <div className="hidden md:flex items-center justify-center bg-gradient-to-br from-#B8C2FF 0% to-blue-600 p-8">
                     <img
                         src="/login_anh.png"
                         alt="Hình minh họa hệ thống HR"
                         className="max-h-[400px] rounded-xl shadow-lg"
+
                     />
                 </div>
             </div>

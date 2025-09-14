@@ -28,7 +28,7 @@ const Register = () => {
             email: "",
             password: "",
             phone: "",
-            role: "0",
+            role: "",
             employee_id: "",
         },
     });
@@ -66,9 +66,9 @@ const Register = () => {
     const handleBack = () => setStep(1);
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4">
-            <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg flex">
-                <div className="w-1/2 p-6 flex flex-col justify-between">
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <div className="max-w-5xl w-full bg-white rounded-2xl shadow overflow-hidden grid grid-cols-1 md:grid-cols-2">
+                <div className="flex flex-col justify-center px-8 py-12">
                     <div>
                         <h1 className="text-2xl font-bold text-blue-600 mb-4">PeopleHub</h1>
                         <h2 className="text-xl font-semibold text-gray-900 mb-4">
@@ -86,7 +86,7 @@ const Register = () => {
                             <div className="space-y-4">
                                 <div>
                                     <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                                        Email / Tên đăng nhập
+                                        Email
                                     </label>
                                     <input
                                         id="email"
@@ -147,6 +147,7 @@ const Register = () => {
                                     type="button"
                                     onClick={handleNext}
                                     className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-500"
+                                    style={{ background: "linear-gradient(to right, #B8C2FF 0%, #6183FF 100%)" }}
                                 >
                                     Tiếp theo
                                 </button>
@@ -213,12 +214,16 @@ const Register = () => {
                                         type="button"
                                         onClick={handleBack}
                                         className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-400"
+                                        style={{ background: "linear-gradient(to right, #B8C2FF 0%, #6183FF 100%)" }}
+
                                     >
                                         Quay lại
                                     </button>
                                     <button
                                         type="submit"
                                         className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-500"
+                                        style={{ background: "linear-gradient(to right, #B8C2FF 0%, #6183FF 100%)" }}
+
                                     >
                                         Đăng ký
                                     </button>
@@ -235,7 +240,7 @@ const Register = () => {
                 </div>
 
                 {/* Bên phải: Ảnh minh họa */}
-                <div className="hidden md:flex items-center justify-center bg-gradient-to-br from-indigo-500 to-blue-600 p-8">
+                <div className="hidden md:flex items-center justify-center bg-gradient-to-br from-#B8C2FF 0% to-blue-600 p-8">
                     <img
                         src="/login_anh.png"
                         alt="Hình minh họa hệ thống HR"

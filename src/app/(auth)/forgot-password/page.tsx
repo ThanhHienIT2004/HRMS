@@ -93,7 +93,7 @@ export default function ForgetPasswordPage() {
         <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4">
             <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg space-y-6">
                 <h2 className="text-2xl font-bold text-center text-gray-800">
-                    {step === "EMAIL" ? "Quên Mật Khẩu" : "Đặt Lại Mật Khẩu"}
+                    {step === "EMAIL" ? "Đặt Lại Mật Khẩu" : "Đặt Lại Mật Khẩu"}
                 </h2>
                 <p className="text-sm text-center text-gray-500">
                     {step === "EMAIL" ? "Nhập email để nhận mã OTP" : "Nhập mã OTP và mật khẩu mới"}
@@ -173,6 +173,8 @@ export default function ForgetPasswordPage() {
                                 ? "bg-gray-400 cursor-not-allowed"
                                 : "bg-blue-600 hover:bg-blue-700"
                         }`}
+                        style={{ background: "linear-gradient(to right, #B8C2FF 0%, #6183FF 100%)" }}
+
                     >
                         {isSubmitting
                             ? "Đang xử lý..."

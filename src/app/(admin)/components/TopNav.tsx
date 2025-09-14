@@ -29,12 +29,15 @@ export const TopNav = () => {
     { href: "/timekeeping", label: "Chấm công", icon: Clock3 },
     { href: "/positions", label: "Vị trí", icon: Briefcase },
     { href: "/departments", label: "Phòng", icon: BiSitemap },
-    { href: "/settings", label: "Cài đặt", icon: Settings },
+    // { href: "/settings", label: "Cài đặt", icon: Settings },
   ];
 
   return (
       <div className="sticky top-0 z-20 w-full rounded-b-2xl bg-[#26272b] text-white">
-        <div className="mx-auto max-w-7xl px-4">
+        <div className="mx-auto max-w-7xl px-4"
+             onMouseEnter={() => setOpen(true)}
+             onMouseLeave={() => setOpen(false)}
+        >
           <div className="flex h-16 items-center justify-between">
             {/* Logo + Menu */}
             <div className="flex items-center gap-3">
@@ -94,10 +97,10 @@ export const TopNav = () => {
 
             {/* Right side */}
             <div className="flex items-center gap-3">
-              {/* Language */}
-              <button className="hidden sm:flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-sm hover:bg-white/15">
-                <Languages className="size-4" /> English <ChevronDown className="size-4" />
-              </button>
+              {/*/!* Language *!/*/}
+              {/*<button className="hidden sm:flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-sm hover:bg-white/15">*/}
+              {/*  <Languages className="size-4" /> English <ChevronDown className="size-4" />*/}
+              {/*</button>*/}
 
               {/* Notifications */}
               <button className="rounded-full bg-white/10 p-2 hover:bg-white/15">
@@ -107,8 +110,7 @@ export const TopNav = () => {
               {/* User avatar + Dropdown */}
               <div
                   className="relative"
-                  onMouseEnter={() => setOpen(true)}
-                  onMouseLeave={() => setOpen(false)}
+
               >
                 {!session?.user ? (
                     <Link

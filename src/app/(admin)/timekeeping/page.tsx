@@ -12,7 +12,7 @@ const GET_TIMEKEEPINGS = gql`
   query GetTimekeepings($from: String!, $to: String!) {
     timekeepings(from: $from, to: $to) {
       timekeeping_id
-      date
+      date 
       checkin
       checkout
       work_hours
